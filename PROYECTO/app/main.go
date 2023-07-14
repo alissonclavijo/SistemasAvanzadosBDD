@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"time"
 
 	"github.com/alissonclavijo/migracion/config"
 	"github.com/alissonclavijo/migracion/db"
@@ -28,9 +29,14 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// Migrar tabla Reservacion
-	err = schemas.MigrateReservaciones(pgDB, fsClient, mgoDB)
-	if err != nil {
-		log.Fatal(err)
+	// Ejecutar la función
+	for {
+		err = schemas.MigrateReservaciones(pgDB, fsClient, mgoDB)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		// Esperar un tiempo antes de ejecutar la función nuevamente
+		time.Sleep(time.Minute) // Puedes ajustar el intervalo según tus necesidades
 	}
 }

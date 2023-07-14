@@ -1,0 +1,37 @@
+__________________________________________________________________________________________________________________
+MANUAL DE INSTALACION APP HOTELES
+__________________________________________________________________________________________________________________
+
+Primer Paso:
+Descargue o clone el repositorio.
+
+Segundo Paso:
+en la carpeta del proyecto borre la carpeta env
+
+Tercer Paso:
+-  Habra o active Visual Estudio.
+-  Habra o active docker.
+-  Habra o active su base de datos en PostgresSQL.(configure con los puertos de docker compose)
+-  Habra o active Firebase  
+
+Cuarto Paso:
+-  Habra la carpeta del proyecto.
+-  Active una nueva terminal.
+
+Quinto Paso:
+-  cree el entorno virtual
+python -m venv env
+
+- active el etorno virtual
+env/Scrpits/activate
+
+- cree los contenedores y la imagen
+docker compose up -d
+
+- dentro del entorno  virtual ejecute la base de datos NO relacional
+go run main.go
+
+- dentro de docker abra la imagen de la aplicacion 
+
+Sexto Paso:
+Utilice la app.
