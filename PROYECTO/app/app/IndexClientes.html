@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Cliente</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .form-group {
+            margin-bottom: 10px;
+        }
+
+        .form-group label {
+            display: inline-block;
+            width: 150px;
+            font-weight: bold;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="number"] {
+            width: 200px;
+            padding: 5px;
+        }
+
+        .form-group input[type="submit"] {
+            padding: 5px 10px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .result {
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+
+        .delete-button {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        .delete-button:hover {
+            background-color: #d32f2f;
+        }
+
+        /* Estilos para el pie de página */
+        footer {
+            background-color: #333;
+            color: #fafafa;
+            padding: 20px;
+            text-align: center;
+            font-size: 9px;
+        }
+
+        footer p {
+            margin: 0;
+        }
+
+        /* Netbar */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+        }
+
+        h1 {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            margin: 0;
+        }
+
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            background-color: #333;
+            text-align: center;
+        }
+
+        li {
+            display: inline-block;
+            margin-right: 20px;
+        }
+
+        li a {
+            display: block;
+            color: #fff;
+            text-decoration: none;
+            padding: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        li a:hover {
+            background-color: #555;
+        }
+
+        .content {
+            margin: 20px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+        }
+
+        .back-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-top: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .back-button:hover {
+            background-color: #555;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Menú</h1>
+    <ul>
+        <li><a href="./IndexTotal">Inicio</a></li>
+        <li><a href="./">Hoteles</a></li>
+        <li><a href="./IndexClientes">Clientes</a></li>
+        <li><a href="./IndexHabitacion">Habitaciones</a></li>
+        <li><a href="./IndexReservacion">Reservaciones</a></li>
+    </ul>
+
+    <h1>CLIENTES</h1>
+
+    <h2>Crear Cliente</h2>
+    <div class="form-group">
+        <label>Cédula Cliente:</label>
+        <input type="text" id="cedula_cliente" oninput="validarCedula(event)"/>
+        <span id="cedula_error" style="color: red; display: none;">La cédula debe contener solo números</span>
+    </div>
+
+    <script>
+        function validarCedula(event) {
+            const input = event.target;
+            const value = input.value;
+    
+            // Remover cualquier caracter no numérico del valor
+            const newValue = value.replace(/\D/g, '');
+    
+            // Verificar si el valor después de remover los caracteres no numéricos es diferente al valor original
+            if (newValue !== value) {
+                // Mostrar el mensaje de error
+                document.getElementById('cedula_error').style.display = 'inline';
+            } else {
+                // Ocultar el mensaje de error
+                document.getElementById('cedula_error').style.display = 'none';
+            }
+    
+            // Actualizar el valor del campo de entrada con solo los números
+            input.value = newValue;
+        }
+    </script>
+
+    <div class="form-group">
+        <label>Apellidos Cliente:</label>
+        <input type="text" id="apellidos_cliente" />
+    </div>
+    <div class="form-group">
+        <label>Nombres Cliente:</label>
+        <input type="text" id="nombres_cliente" />
+    </div>
+    <div class="form-group">
+        <label>Dirección Cliente:</label>
+        <input type="text" id="direccion_cliente" />
+    </div>
+    <div class="form-group">
+        <label>Teléfono Cliente:</label>
+        <input type="text" id="telefono_cliente" oninput="validarTelefono(event)" />
+        <span id="telefono_error" style="color: red; display: none;">El teléfono debe contener solo números</span>
+    </div>
+
+    <script>
+        function validarTelefono(event) {
+            const input = event.target;
+            const value = input.value;
+    
+            // Remover cualquier caracter no numérico del valor
+            const newValue = value.replace(/\D/g, '');
+    
+            // Verificar si el valor después de remover los caracteres no numéricos es diferente al valor original
+            if (newValue !== value) {
+                // Mostrar el mensaje de error
+                document.getElementById('telefono_error').style.display = 'inline';
+            } else {
+                // Ocultar el mensaje de error
+                document.getElementById('telefono_error').style.display = 'none';
+            }
+    
+            // Actualizar el valor del campo de entrada con solo los números
+            input.value = newValue;
+        }
+    </script>
+    
+    <div class="form-group">
+        <label>Email Cliente:</label>
+        <input type="text" id="email_cliente" />
+    </div>
+    <div class="form-group">
+        <label>Número de Cuenta Cliente:</label>
+        <input type="number" id="numcuenta_cliente" />
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Crear" onclick="createCliente()" />
+    </div>
+
+    <h2>Clientes</h2>
+    <table id="clientesTable">
+        <thead>
+            <tr>
+                <th>Cédula Cliente</th>
+                <th>Apellidos Cliente</th>
+                <th>Nombres Cliente</th>
+                <th>Dirección Cliente</th>
+                <th>Teléfono Cliente</th>
+                <th>Email Cliente</th>
+                <th>Número de Cuenta</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Aquí se agregarán las filas de los clientes -->
+        </tbody>
+    </table>
+
+    <div class="result" id="createResult"></div>
+
+    <script>
+        // Función para crear un nuevo cliente
+        function createCliente() {
+            const cedulaCliente = document.getElementById("cedula_cliente").value;
+            const apellidosCliente = document.getElementById("apellidos_cliente").value;
+            const nombresCliente = document.getElementById("nombres_cliente").value;
+            const direccionCliente = document.getElementById("direccion_cliente").value;
+            const telefonoCliente = document.getElementById("telefono_cliente").value;
+            const emailCliente = document.getElementById("email_cliente").value;
+            const numCuentaCliente = document.getElementById("numcuenta_cliente").value;
+
+            const clienteData = {
+                cedula_cliente: cedulaCliente,
+                apellidos_cliente: apellidosCliente,
+                nombres_cliente: nombresCliente,
+                direccion_cliente: direccionCliente,
+                telefono_cliente: telefonoCliente,
+                email_cliente: emailCliente,
+                numcuenta_cliente: parseInt(numCuentaCliente),
+            };
+
+            fetch("http://localhost:8000/clientes", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(clienteData),
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    // Mostrar el resultado de la creación del cliente
+                    const createResult = document.getElementById("createResult");
+                    createResult.innerHTML = data.message;
+                    // Limpiar los campos del formulario
+                    document.getElementById("cedula_cliente").value = "";
+                    document.getElementById("apellidos_cliente").value = "";
+                    document.getElementById("nombres_cliente").value = "";
+                    document.getElementById("direccion_cliente").value = "";
+                    document.getElementById("telefono_cliente").value = "";
+                    document.getElementById("email_cliente").value = "";
+                    document.getElementById("numcuenta_cliente").value = "";
+                    // Actualizar la tabla de clientes
+                    updateClientesTable();
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        }
+
+        // Función para actualizar la tabla de clientes
+        function updateClientesTable() {
+            const clientesTable = document.getElementById("clientesTable");
+            const tbody = clientesTable.getElementsByTagName("tbody")[0];
+            tbody.innerHTML = ""; // Limpiar el contenido actual de la tabla
+
+            fetch("http://localhost:8000/clientes")
+                .then((response) => response.json())
+                .then((data) => {
+                    const clientes = data.clientes;
+
+                    // Recorrer los clientes y agregar una fila por cada uno
+                    clientes.forEach((cliente) => {
+                        const row = document.createElement("tr");
+
+                        const cedulaCell = document.createElement("td");
+                        cedulaCell.textContent = cliente.cedula_cliente;
+                        row.appendChild(cedulaCell);
+
+                        const apellidosCell = document.createElement("td");
+                        apellidosCell.textContent = cliente.apellidos_cliente;
+                        row.appendChild(apellidosCell);
+
+                        const nombresCell = document.createElement("td");
+                        nombresCell.textContent = cliente.nombres_cliente;
+                        row.appendChild(nombresCell);
+
+                        const direccionCell = document.createElement("td");
+                        direccionCell.textContent = cliente.direccion_cliente;
+                        row.appendChild(direccionCell);
+
+                        const telefonoCell = document.createElement("td");
+                        telefonoCell.textContent = cliente.telefono_cliente;
+                        row.appendChild(telefonoCell);
+
+                        const emailCell = document.createElement("td");
+                        emailCell.textContent = cliente.email_cliente;
+                        row.appendChild(emailCell);
+
+                        const numCuentaCell = document.createElement("td");
+                        numCuentaCell.textContent = cliente.numcuenta_cliente;
+                        row.appendChild(numCuentaCell);
+
+                        const actionsCell = document.createElement("td");
+                        const deleteButton = document.createElement("button");
+                        deleteButton.textContent = "Eliminar";
+                        deleteButton.className = "delete-button";
+                        deleteButton.onclick = function () {
+                            deleteCliente(cliente.cedula_cliente);
+                        };
+                        actionsCell.appendChild(deleteButton);
+                        row.appendChild(actionsCell);
+
+                        tbody.appendChild(row);
+                    });
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        }
+
+        // Función para eliminar un cliente
+        function deleteCliente(cedulaCliente) {
+            fetch(`http://localhost:8000/clientes/${cedulaCliente}`, {
+                method: "DELETE",
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    // Mostrar el resultado de la eliminación del cliente
+                    const createResult = document.getElementById("createResult");
+                    createResult.innerHTML = data.message;
+                    // Actualizar la tabla de clientes
+                    updateClientesTable();
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        }
+
+        // Actualizar la tabla de clientes al cargar la página
+        updateClientesTable();
+    </script>
+
+<footer class="text-center text-white fixed-bottom" style="background-color: #0b0409;">
+    <div style="text-align: center;">
+        <h2>Contactos:</h2>
+        <h2>anclavijo@espe.edu.ec </h2> 
+        <h2>bmmorales3@espe.edu.ec</h2>
+        <h2>baiza@espe.edu.ec</h2> 
+        <h2> dyvinueza@espe.edu.ec</h2>
+    </div>
+  </footer>
+
+</body>
+
+</html>

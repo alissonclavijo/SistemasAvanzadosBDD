@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Reservaciones</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .form-group {
+            margin-bottom: 10px;
+        }
+
+        .form-group label {
+            display: inline-block;
+            width: 150px;
+            font-weight: bold;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="number"] {
+            width: 200px;
+            padding: 5px;
+        }
+
+        .form-group input[type="submit"] {
+            padding: 5px 10px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .result {
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+
+        .delete-button {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        .delete-button:hover {
+            background-color: #d32f2f;
+        }
+
+        /* Estilos para el pie de página */
+        footer {
+            background-color: #333;
+            color: #fafafa;
+            padding: 20px;
+            text-align: center;
+            font-size: 9px;
+        }
+
+        footer p {
+            margin: 0;
+        }
+        /* Netbar */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+        }
+
+        h1 {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            margin: 0;
+        }
+
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            background-color: #333;
+            text-align: center;
+        }
+
+        li {
+            display: inline-block;
+            margin-right: 20px;
+        }
+
+        li a {
+            display: block;
+            color: #fff;
+            text-decoration: none;
+            padding: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        li a:hover {
+            background-color: #555;
+        }
+
+        .content {
+            margin: 20px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+        }
+
+        .back-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-top: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .back-button:hover {
+            background-color: #555;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Menú</h1>
+    <ul>
+        <li><a href="./IndexTotal">Inicio</a></li>
+        <li><a href="./">Hoteles</a></li>
+        <li><a href="./IndexClientes">Clientes</a></li>
+        <li><a href="./IndexHabitacion">Habitaciones</a></li>
+        <li><a href="./IndexReservacion">Reservaciones</a></li>
+    </ul>
+
+    <h1>RESERVACIONES</h1>
+
+    <h2>Crear Reservación</h2>
+    <div class="form-group">
+        <label>ID Reservación:</label>
+        <input type="text" id="id_reservacion" />
+    </div>
+    <div class="form-group">
+        <label>Cédula Cliente:</label>
+        <input type="text" id="cedula_cliente" oninput="validateCedula(event)" />
+        <p id="error_message" style="color: red; display: none;">Solo se permiten números. Máximo 10 dígitos.</p>
+    </div>
+    
+    <script>
+        function validateCedula(event) {
+            var cedulaInput = event.target;
+            var errorLabel = document.getElementById("error_message");
+            var cedula = cedulaInput.value;
+    
+            // Remover caracteres no numéricos
+            cedula = cedula.replace(/\D/g, '');
+            cedulaInput.value = cedula;
+    
+            // Verificar si la cédula contiene caracteres no numéricos o tiene más de 10 dígitos
+            if (cedula !== cedulaInput.value || cedula.length > 10) {
+                errorLabel.style.display = "block";
+                cedulaInput.value = cedula.slice(0, 10); // Limitar a 10 dígitos
+            } else {
+                errorLabel.style.display = "none";
+            }
+        }
+    </script>
+    <div class="form-group">
+        <label>Estado Reservación:</label>
+        <select id="estado_reservacion">
+            <option value="Conf">Confirmada</option>
+            <option value="Canc">Cancelada</option>
+            <option value="Pend">Pendiente</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label>Detalles Reservación:</label>
+        <input type="date" id="detalles_reservacion" />
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Crear" onclick="createReservacion()" />
+    </div>
+
+    <h2>Reservaciones</h2>
+    <table id="reservacionesTable">
+        <thead>
+            <tr>
+                <th>ID Reservación</th>
+                <th>Cédula Cliente</th>
+                <th>Estado Reservación</th>
+                <th>Detalles Reservación</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Aquí se agregarán las filas de las reservaciones -->
+        </tbody>
+    </table>
+
+    <div class="result" id="createResult"></div>
+
+    <script>
+        // Función para crear una nueva reservación
+        function createReservacion() {
+    const idReservacion = document.getElementById("id_reservacion").value;
+    const cedulaCliente = document.getElementById("cedula_cliente").value;
+    const estadoReservacion = document.getElementById("estado_reservacion").value;
+    const detallesReservacion = document.getElementById("detalles_reservacion").value;
+
+    const reservacionData = {
+      ID_RESERVACION: idReservacion,
+      CEDULA_CLIENTE: cedulaCliente,
+      ESTADO_RESERVACION: estadoReservacion,
+      DETALLES_RESERVACION: detallesReservacion,
+    };
+
+            fetch("http://localhost:8000/reservaciones", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(reservacionData),
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log(data);
+                    // Mostrar el resultado de la creación de la reservación
+                    const createResult = document.getElementById("createResult");
+                    createResult.innerHTML = data.message;
+                    // Limpiar los campos del formulario
+                    document.getElementById("id_reservacion").value = "";
+                    document.getElementById("cedula_cliente").value = "";
+                    document.getElementById("estado_reservacion").value = "Conf";
+                    document.getElementById("detalles_reservacion").value = "";
+                    // Actualizar la tabla de reservaciones
+                    updateReservacionesTable();
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        }
+
+        // Función para actualizar la tabla de reservaciones
+        function updateReservacionesTable() {
+            const reservacionesTable = document.getElementById("reservacionesTable");
+            const tbody = reservacionesTable.getElementsByTagName("tbody")[0];
+            tbody.innerHTML = ""; // Limpiar el contenido actual de la tabla
+
+            fetch("http://localhost:8000/reservaciones")
+                .then((response) => response.json())
+                .then((data) => {
+                    const reservaciones = data.reservaciones;
+
+                    // Recorrer las reservaciones y agregar una fila por cada una
+                    reservaciones.forEach((reservacion) => {
+                        console.log(reservacion)
+                        const row = document.createElement("tr");
+
+                        const idReservacionCell = document.createElement("td");
+                        idReservacionCell.textContent = reservacion.ID_RESERVACION;
+                        row.appendChild(idReservacionCell);
+
+                        const cedulaClienteCell = document.createElement("td");
+                        cedulaClienteCell.textContent = reservacion.CEDULA_CLIENTE;
+                        row.appendChild(cedulaClienteCell);
+
+                        const estadoReservacionCell = document.createElement("td");
+                        estadoReservacionCell.textContent = reservacion.ESTADO_RESERVACION;
+                        row.appendChild(estadoReservacionCell);
+
+                        const detallesReservacionCell = document.createElement("td");
+                        detallesReservacionCell.textContent = reservacion.DETALLES_RESERVACION;
+                        row.appendChild(detallesReservacionCell);
+
+                        const actionsCell = document.createElement("td");
+                        const deleteButton = document.createElement("button");
+                        deleteButton.textContent = "Eliminar";
+                        deleteButton.className = "delete-button";
+                        deleteButton.onclick = function () {
+                            deleteReservacion(reservacion.ID_RESERVACION);
+                        };
+                        actionsCell.appendChild(deleteButton);
+                        row.appendChild(actionsCell);
+
+                        tbody.appendChild(row);
+                    });
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        }
+
+        // Función para eliminar una reservación
+        function deleteReservacion(idReservacion) {
+            fetch(`http://localhost:8000/reservaciones/${idReservacion}`, {
+                method: "DELETE",
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    // Mostrar el resultado de la eliminación de la reservación
+                    const createResult = document.getElementById("createResult");
+                    createResult.innerHTML = data.message;
+                    // Actualizar la tabla de reservaciones
+                    updateReservacionesTable();
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        }
+
+        // Actualizar la tabla de reservaciones al cargar la página
+        updateReservacionesTable();
+    </script>
+
+<footer class="text-center text-white fixed-bottom" style="background-color: #0b0409;">
+    <div style="text-align: center;">
+        <h2>Contactos:</h2>
+        <h2>anclavijo@espe.edu.ec </h2> 
+        <h2>bmmorales3@espe.edu.ec</h2>
+        <h2>baiza@espe.edu.ec</h2> 
+        <h2> dyvinueza@espe.edu.ec</h2>
+    </div>
+  </footer>
+
+</body>
+
+</html>

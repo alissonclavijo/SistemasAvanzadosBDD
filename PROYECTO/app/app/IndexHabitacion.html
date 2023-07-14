@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Habitaciones</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .form-group {
+            margin-bottom: 10px;
+        }
+
+        .form-group label {
+            display: inline-block;
+            width: 150px;
+            font-weight: bold;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="number"] {
+            width: 200px;
+            padding: 5px;
+        }
+
+        .form-group input[type="submit"] {
+            padding: 5px 10px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .result {
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+
+        .delete-button {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        .delete-button:hover {
+            background-color: #d32f2f;
+        }
+
+        /* Estilos para el pie de página */
+        footer {
+            background-color: #333;
+            color: #fafafa;
+            padding: 20px;
+            text-align: center;
+            font-size: 9px;
+        }
+
+        footer p {
+            margin: 0;
+        }
+        /* Netbar */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+        }
+
+        h1 {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            margin: 0;
+        }
+
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            background-color: #333;
+            text-align: center;
+        }
+
+        li {
+            display: inline-block;
+            margin-right: 20px;
+        }
+
+        li a {
+            display: block;
+            color: #fff;
+            text-decoration: none;
+            padding: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        li a:hover {
+            background-color: #555;
+        }
+
+        .content {
+            margin: 20px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+        }
+
+        .back-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-top: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .back-button:hover {
+            background-color: #555;
+        }
+    </style>
+</head>
+<body>
+    <h1>Menú</h1>
+    <ul>
+        <li><a href="./IndexTotal">Inicio</a></li>
+        <li><a href="./">Hoteles</a></li>
+        <li><a href="./IndexClientes">Clientes</a></li>
+        <li><a href="./IndexHabitacion">Habitaciones</a></li>
+        <li><a href="./IndexReservacion">Reservaciones</a></li>
+    </ul>
+
+    <h1>HABITACIONES</h1>
+
+    <h2>Crear Habitación</h2>
+    <div class="form-group">
+        <label>ID Habitación:</label>
+        <input type="text" id="id_habitacion" />
+    </div>
+    <div class="form-group">
+        <label>ID Hotel:</label>
+        <input type="text" id="id_hotel" />
+    </div>
+    <div class="form-group">
+        <label>Tipo de Habitación:</label>
+        <input type="text" id="tipo_habitacion" />
+    </div>
+    <div class="form-group">
+        <label>Precio de la Habitación:</label>
+        <input type="number" step="0.01" id="precio_habitacion" />
+    </div>
+    <div class="form-group">
+        <label>Disponibilidad de la Habitación:</label>
+        <select id="disponibilidad_habitacion">
+            <option value="1">Disponible</option>
+            <option value="0">No disponible</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Crear" onclick="createHabitacion()" />
+    </div>
+
+    <h2>Habitaciones</h2>
+    <table id="habitacionesTable">
+        <thead>
+            <tr>
+                <th>ID Habitación</th>
+                <th>ID Hotel</th>
+                <th>Tipo de Habitación</th>
+                <th>Precio de la Habitación</th>
+                <th>Disponibilidad de la Habitación</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <div class="result" id="createResult"></div>
+
+    <script>
+        // Función para crear una nueva habitación
+        function createHabitacion() {
+            const idHabitacion = document.getElementById("id_habitacion").value;
+            const idHotel = document.getElementById("id_hotel").value;
+            const tipoHabitacion = document.getElementById("tipo_habitacion").value;
+            const precioHabitacion = document.getElementById("precio_habitacion").value;
+            const disponibilidadHabitacion = document.getElementById("disponibilidad_habitacion").value;
+
+            const habitacionData = {
+                id_habitacion: idHabitacion,
+                id_hotel: idHotel,
+                tipo_habitacion: tipoHabitacion,
+                precio_habitacion: precioHabitacion,
+                disponibilidad_habitacion: disponibilidadHabitacion,
+            };
+
+            fetch("http://localhost:8000/habitaciones", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(habitacionData),
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    // Mostrar el resultado de la creación de la habitación
+                    const createResult = document.getElementById("createResult");
+                    createResult.innerHTML = data.message;
+                    // Limpiar los campos del formulario
+                    document.getElementById("id_habitacion").value = "";
+                    document.getElementById("id_hotel").value = "";
+                    document.getElementById("tipo_habitacion").value = "";
+                    document.getElementById("precio_habitacion").value = "";
+                    document.getElementById("disponibilidad_habitacion").value = "1";
+                    // Actualizar la tabla de habitaciones
+                    updateHabitacionesTable();
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        }
+
+        // Función para actualizar la tabla de habitaciones
+        function updateHabitacionesTable() {
+            const habitacionesTable = document.getElementById("habitacionesTable");
+            const tbody = habitacionesTable.getElementsByTagName("tbody")[0];
+            tbody.innerHTML = ""; // Limpiar el contenido actual de la tabla
+
+            fetch("http://localhost:8000/habitaciones")
+                .then((response) => response.json())
+                .then((data) => {
+                    const habitaciones = data.habitaciones;
+
+                    // Recorrer las habitaciones y agregar una fila por cada una
+                    habitaciones.forEach((habitacion) => {
+                        const row = document.createElement("tr");
+
+                        const idHabitacionCell = document.createElement("td");
+                        idHabitacionCell.textContent = habitacion.id_habitacion;
+                        row.appendChild(idHabitacionCell);
+
+                        const idHotelCell = document.createElement("td");
+                        idHotelCell.textContent = habitacion.id_hotel;
+                        row.appendChild(idHotelCell);
+
+                        const tipoHabitacionCell = document.createElement("td");
+                        tipoHabitacionCell.textContent = habitacion.tipo_habitacion;
+                        row.appendChild(tipoHabitacionCell);
+
+                        const precioHabitacionCell = document.createElement("td");
+                        precioHabitacionCell.textContent = habitacion.precio_habitacion;
+                        row.appendChild(precioHabitacionCell);
+
+                        const disponibilidadHabitacionCell = document.createElement("td");
+                        disponibilidadHabitacionCell.textContent = habitacion.disponibilidad_habitacion === "1" ? "Disponible" : "No disponible";
+                        row.appendChild(disponibilidadHabitacionCell);
+
+                        const actionsCell = document.createElement("td");
+                        const deleteButton = document.createElement("button");
+                        deleteButton.textContent = "Eliminar";
+                        deleteButton.className = "delete-button";
+                        deleteButton.onclick = function () {
+                            deleteHabitacion(habitacion.id_habitacion);
+                        };
+                        actionsCell.appendChild(deleteButton);
+                        row.appendChild(actionsCell);
+
+                        tbody.appendChild(row);
+                    });
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        }
+
+        // Función para eliminar una habitación
+        function deleteHabitacion(idHabitacion) {
+            fetch(`http://localhost:8000/habitaciones/${idHabitacion}`, {
+                method: "DELETE",
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    // Mostrar el resultado de la eliminación de la habitación
+                    const createResult = document.getElementById("createResult");
+                    createResult.innerHTML = data.message;
+                    // Actualizar la tabla de habitaciones
+                    updateHabitacionesTable();
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        }
+
+        // Actualizar la tabla de habitaciones al cargar la página
+        updateHabitacionesTable();
+        
+    </script>
+
+<footer class="text-center text-white fixed-bottom" style="background-color: #0b0409;">
+    <div style="text-align: center;">
+        <h2>Contactos:</h2>
+        <h2>anclavijo@espe.edu.ec </h2> 
+        <h2>bmmorales3@espe.edu.ec</h2>
+        <h2>baiza@espe.edu.ec</h2> 
+        <h2> dyvinueza@espe.edu.ec</h2>
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Hoteles</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .form-group {
+            margin-bottom: 10px;
+        }
+
+        .form-group label {
+            display: inline-block;
+            width: 150px;
+            font-weight: bold;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="number"] {
+            width: 200px;
+            padding: 5px;
+        }
+
+        .form-group input[type="submit"] {
+            padding: 5px 10px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .result {
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+
+        .delete-button {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        .delete-button:hover {
+            background-color: #d32f2f;
+        }
+
+        /* Estilos para el pie de página */
+        footer {
+            background-color: #333;
+            color: #fafafa;
+            padding: 20px;
+            text-align: center;
+            font-size: 9px;
+        }
+
+        footer p {
+            margin: 0;
+        }
+        /* Netbar */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+        }
+
+        h1 {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            margin: 0;
+        }
+
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            background-color: #333;
+            text-align: center;
+        }
+
+        li {
+            display: inline-block;
+            margin-right: 20px;
+        }
+
+        li a {
+            display: block;
+            color: #fff;
+            text-decoration: none;
+            padding: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        li a:hover {
+            background-color: #555;
+        }
+
+        .content {
+            margin: 20px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+        }
+
+        .back-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-top: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .back-button:hover {
+            background-color: #555;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Menú</h1>
+    <ul>
+        <li><a href="./IndexTotal">Inicio</a></li>
+        <li><a href="./">Hoteles</a></li>
+        <li><a href="./IndexClientes">Clientes</a></li>
+        <li><a href="./IndexHabitacion">Habitaciones</a></li>
+        <li><a href="./IndexReservacion">Reservaciones</a></li>
+    </ul>
+
+    <h1>HOTELES</h1>
+
+    <h2>Crear Hotel</h2>
+    <div class="form-group">
+        <label>ID Hotel:</label>
+        <input type="text" id="id_hotel" />
+    </div>
+    <div class="form-group">
+        <label>Ubicación Hotel:</label>
+        <input type="text" id="ubicacion_hotel" />
+    </div>
+    <div class="form-group">
+        <label>Número de Habitaciones Hotel:</label>
+        <input type="number" id="numerohabitaciones_hotel" />
+    </div>
+    <div class="form-group">
+        <label>Categoría Hotel:</label>
+        <input type="text" id="categoria_hotel" />
+    </div>
+    <div class="form-group">
+        <label>Nombre Hotel:</label>
+        <input type="text" id="nombre_hotel" />
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Crear" onclick="createHotel()" />
+    </div>
+
+    <h2>Hoteles</h2>
+    <table id="hotelesTable">
+        <thead>
+            <tr>
+                <th>ID Hotel</th>
+                <th>Ubicación Hotel</th>
+                <th>Número de Habitaciones</th>
+                <th>Categoría</th>
+                <th>Nombre</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Aquí se agregarán las filas de los hoteles -->
+        </tbody>
+    </table>
+
+    <div class="result" id="createResult"></div>
+
+    <script>
+        // Función para crear un nuevo hotel
+        function createHotel() {
+            const idHotel = document.getElementById("id_hotel").value;
+            const ubicacionHotel = document.getElementById("ubicacion_hotel").value;
+            const numeroHabitacionesHotel = document.getElementById("numerohabitaciones_hotel").value;
+            const categoriaHotel = document.getElementById("categoria_hotel").value;
+            const nombreHotel = document.getElementById("nombre_hotel").value;
+
+            const hotelData = {
+                id_hotel: idHotel,
+                ubicacion_hotel: ubicacionHotel,
+                numerohabitaciones_hotel: parseInt(numeroHabitacionesHotel),
+                categoria_hotel: categoriaHotel,
+                nombre_hotel: nombreHotel
+            };
+
+            fetch("http://localhost:8000/hoteles", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(hotelData),
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Mostrar el resultado de la creación del hotel
+                const createResult = document.getElementById("createResult");
+                createResult.innerHTML = data.message;
+                // Limpiar los campos del formulario
+                document.getElementById("id_hotel").value = "";
+                document.getElementById("ubicacion_hotel").value = "";
+                document.getElementById("numerohabitaciones_hotel").value = "";
+                document.getElementById("categoria_hotel").value = "";
+                document.getElementById("nombre_hotel").value = "";
+                // Actualizar la tabla de hoteles
+                updateHotelsTable();
+            })
+            .catch(error => {
+                console.error(error);
+            });
+        }
+
+        // Función para actualizar la tabla de hoteles
+        function updateHotelsTable() {
+            const hotelesTable = document.getElementById("hotelesTable");
+            const tbody = hotelesTable.getElementsByTagName("tbody")[0];
+            tbody.innerHTML = ""; // Limpiar el contenido actual de la tabla
+
+            fetch("http://localhost:8000/hoteles")
+                .then(response => response.json())
+                .then(data => {
+                    const hoteles = data.hoteles;
+
+                    // Recorrer los hoteles y agregar una fila por cada uno
+                    hoteles.forEach(hotel => {
+                        const row = document.createElement("tr");
+
+                        const idCell = document.createElement("td");
+                        idCell.textContent = hotel.id_hotel;
+                        row.appendChild(idCell);
+
+                        const ubicacionCell = document.createElement("td");
+                        ubicacionCell.textContent = hotel.ubicacion_hotel;
+                        row.appendChild(ubicacionCell);
+
+                        const numHabitacionesCell = document.createElement("td");
+                        numHabitacionesCell.textContent = hotel.numerohabitaciones_hotel;
+                        row.appendChild(numHabitacionesCell);
+
+                        const categoriaCell = document.createElement("td");
+                        categoriaCell.textContent = hotel.categoria_hotel;
+                        row.appendChild(categoriaCell);
+
+                        const nombreCell = document.createElement("td");
+                        nombreCell.textContent = hotel.nombre_hotel;
+                        row.appendChild(nombreCell);
+
+                        const actionsCell = document.createElement("td");
+                        const deleteButton = document.createElement("button");
+                        deleteButton.textContent = "Eliminar";
+                        deleteButton.onclick = function() {
+                            deleteHotel(hotel.id_hotel);
+                        };
+                        actionsCell.appendChild(deleteButton);
+                        row.appendChild(actionsCell);
+
+                        tbody.appendChild(row);
+                    });
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        }
+
+        // Función para eliminar un hotel
+        function deleteHotel(idHotel) {
+            fetch(`http://localhost:8000/hoteles/${idHotel}`, {
+                method: "DELETE"
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Mostrar el resultado de la eliminación del hotel
+                const createResult = document.getElementById("createResult");
+                createResult.innerHTML = data.message;
+                // Actualizar la tabla de hoteles
+                updateHotelsTable();
+            })
+            .catch(error => {
+                console.error(error);
+            });
+        }
+
+        // Actualizar la tabla de hoteles al cargar la página
+        updateHotelsTable();
+    </script>
+
+<footer class="text-center text-white fixed-bottom" style="background-color: #0b0409;">
+    <div style="text-align: center;">
+        <h2>Contactos:</h2>
+        <h2>anclavijo@espe.edu.ec </h2> 
+        <h2>bmmorales3@espe.edu.ec</h2>
+        <h2>baiza@espe.edu.ec</h2> 
+        <h2> dyvinueza@espe.edu.ec</h2>
+    </div>
+  </footer>
+
+</body>
+
+</html>

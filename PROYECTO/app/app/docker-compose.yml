@@ -1,0 +1,43 @@
+version: "3.9"
+services:
+  api:
+    hostname: gestionhoteles
+    container_name: gestionhoteles
+    networks:
+      - my_network
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - PYTHON_ENV=development
+      - POSTGRES_USER=hamed
+      - POSTGRES_PASSWORD=123456
+      - POSTGRES_DB=hamed
+      - POSTGRES_PORT=5433
+    ports:
+      - "8000:8000"
+    volumes:
+      - ".:/app"
+
+  pg_master:
+    hostname: gestionhotelesbdd
+    container_name: gestionhotelesbdd
+    networks:
+      - my_network
+    image: 2hamed/pg_master
+    ports:
+      - "5433:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=hamed
+      - POSTGRES_PASSWORD=123456
+      - POSTGRES_DB=hamed
+      - PG_REP_USER=rep
+      - PG_REP_PASSWORD=123456
+
+networks:
+  my_network:
+
+volumes:
+  pg_data:
