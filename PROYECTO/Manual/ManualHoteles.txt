@@ -25,6 +25,9 @@ python -m venv env
 - active el etorno virtual
 env/Scrpits/activate
 
+-instalamos todas los requerimientos
+pip install -r requirements.txt
+
 - cree los contenedores y la imagen
 docker compose up -d
 
